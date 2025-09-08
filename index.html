@@ -3,11 +3,400 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BE YOURS — Shopify Portfolio</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+  <title>BE yours — Shopify Portfolio & Agency</title>
+  <meta name="description" content="BE yours — Shopify agency: design, development, migrations, and growth for merchants." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===========================
+       THEME (green + creamy white)
+       =========================== */
+    :root{
+      --cream: #f7f7f3;
+      --ivory: #fbfbf8;
+      --green-1: #2f7a3e;
+      --green-2: #5fb46a;
+      --muted: #6b6f66;
+      --glass: rgba(255,255,255,0.7);
+      --radius: 12px;
+      --shadow: 0 12px 36px rgba(20,40,20,0.08);
+      --maxw: 1200px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--ivory),var(--cream));
+      color: #07210f;
+      line-height:1.45;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin:28px auto;padding:20px}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px;border-radius:14px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo {
+      width:56px;height:56px;border-radius:12px;
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+      display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;
+      box-shadow:var(--shadow);
+    }
+    .brand h1{margin:0;font-size:18px}
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{font-weight:600;color:var(--muted);padding:8px 10px;border-radius:8px}
+    nav a:hover{color:var(--green-1);background:rgba(47,122,62,0.06)}
+    .cta{background:var(--green-1);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;border:0}
+
+    /* Hero */
+    .hero{
+      display:grid;grid-template-columns:1fr 460px;gap:28px;align-items:center;margin-top:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+      padding:26px;border-radius:16px;box-shadow:var(--shadow);
+    }
+    .eyebrow{display:inline-block;padding:6px 12px;background:var(--glass);border-radius:999px;color:var(--muted);font-weight:600}
+    .hero h2{margin:12px 0 10px;font-size:32px;line-height:1.05}
+    .lead{color:var(--muted);margin-bottom:18px}
+    .hero-ctas{display:flex;gap:12px;align-items:center}
+
+    .mock {border-radius:12px;overflow:hidden;border:1px solid rgba(40,80,40,0.06);background:linear-gradient(180deg,#fff,#f4f8f2);box-shadow:0 10px 30px rgba(6,18,10,0.06)}
+    .mock img{display:block;width:100%;height:340px;object-fit:cover}
+
+    /* Filters */
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+    .chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(10,20,10,0.03);cursor:pointer;font-weight:600;color:var(--muted)}
+    .chip.active{background:linear-gradient(90deg,var(--green-1),var(--green-2));color:#fff;border:0;box-shadow:0 8px 20px rgba(47,122,62,0.12)}
+
+    /* Portfolio grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:6px}
+    .card{position:relative;overflow:hidden;border-radius:12px;background:#fff;border:1px solid rgba(10,20,10,0.03);box-shadow:0 10px 30px rgba(6,18,10,0.04);cursor:pointer;transition:transform .28s ease, box-shadow .28s ease}
+    .card:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(10,30,10,0.08)}
+    .thumb{height:220px;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.9,.2,1)}
+    .card:hover .thumb img{transform:scale(1.06) rotate(.5deg)}
+    .meta{padding:12px}
+    .meta h3{margin:0 0 6px;font-size:16px}
+    .meta p{margin:0;color:var(--muted);font-size:14px}
+
+    /* Tag label */
+    .tag{display:inline-block;padding:6px 10px;border-radius:8px;background:rgba(47,122,62,0.06);color:var(--green-1);font-weight:700;margin-top:8px;font-size:12px}
+
+    /* Modal / lightbox */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(5,10,5,0.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:120;opacity:0;pointer-events:none;transition:opacity .25s ease}
+    .modal{max-width:960px;width:100%;background:linear-gradient(180deg,#fff,#f7fff2);border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(6,18,10,0.45);transform:translateY(16px);transition:transform .28s ease}
+    .modal.open{transform:none}
+    .modal-backdrop.open{opacity:1;pointer-events:auto}
+    .modal-inner{display:grid;grid-template-columns:1fr 340px;gap:0}
+    .modal-media img{width:100%;height:100%;object-fit:cover;display:block}
+    .modal-body{padding:18px}
+    .modal-body h3{margin-top:0}
+    .close-btn{position:absolute;right:14px;top:14px;background:rgba(255,255,255,0.9);border-radius:8px;padding:8px 10px;border:0;font-weight:700;cursor:pointer}
+
+    /* Footer */
+    footer{margin-top:28px;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(47,122,62,0.06), rgba(47,122,62,0.02));display:flex;justify-content:space-between;align-items:center}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr;gap:18px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .modal-inner{grid-template-columns:1fr 320px}
+    }
+    @media (max-width:640px){
+      nav{display:none}
+      .grid{grid-template-columns:1fr}
+      .mock img{height:220px;object-position:center}
+      .modal-inner{grid-template-columns:1fr}
+      .modal-body{order:2}
+    }
+
+    /* small helpers & animation */
+    .fade-up{opacity:0;transform:translateY(8px);transition:opacity .5s ease, transform .5s ease}
+    .fade-up.show{opacity:1;transform:none}
+    .muted{color:var(--muted)}
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--green-1);display:inline-block;margin-right:8px}
+  </style>
 </head>
+
 <body>
-  <!-- CONTENT TRUNCATED FOR BREVITY (FULL HTML INCLUDED IN PREVIOUS RESPONSE) -->
+  <div class="wrap">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="logo">BY</div>
+        <div>
+          <h1>BE yours</h1>
+          <div style="font-size:12px;color:var(--muted)">Shopify design · Development · Growth</div>
+        </div>
+      </div>
+
+      <nav aria-label="Main menu">
+        <a href="#services">Services</a>
+        <a href="#portfolio">Work</a>
+        <a href="#case">Case studies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="cta" id="quoteBtn">Get a quote</button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <span class="eyebrow">Shopify · eCommerce</span>
+        <h2 id="hero-title">High-converting Shopify stores — crafted by BE yours</h2>
+        <p class="lead">Custom themes, fast performance, and thoughtful UX for brands that want real growth. We build stores that look premium and convert.</p>
+
+        <div class="hero-ctas">
+          <button class="cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a project</button>
+          <a href="#portfolio" style="display:inline-block;padding:10px 12px;border-radius:10px;font-weight:700;color:var(--green-1)">See our work →</a>
+        </div>
+
+        <div style="margin-top:18px" class="fade-up" id="servicesPreview">
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="min-width:140px;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)">
+              <div style="font-weight:800;font-size:18px">Custom themes</div>
+              <div class="muted" style="font-size:13px">Shopify & Shopify Plus</div>
+            </div>
+            <div style="min-width:140px;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)">
+              <div style="font-weight:800;font-size:18px">Migrations</div>
+              <div class="muted" style="font-size:13px">Large catalogs & metafields</div>
+            </div>
+            <div style="min-width:140px;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)">
+              <div style="font-weight:800;font-size:18px">CRO & Growth</div>
+              <div class="muted" style="font-size:13px">A/B tests & analytics</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock" aria-hidden="false">
+        <!-- Replace these with real project images -->
+        <img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Project preview image">
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+      <div class="filters" id="filterBar" role="list">
+        <div class="chip active" data-filter="all">All</div>
+        <div class="chip" data-filter="ecommerce">E-commerce</div>
+        <div class="chip" data-filter="branding">Branding</div>
+        <div class="chip" data-filter="migration">Migration</div>
+        <div class="chip" data-filter="ui-ux">UI / UX</div>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted)"><span class="dot" style="vertical-align:middle"></span> Featured on design showcases</div>
+    </div>
+
+    <!-- Portfolio Grid -->
+    <section id="portfolio" class="grid" aria-live="polite">
+      <!-- Card 1 -->
+      <article class="card" data-tags="ecommerce,branding" tabindex="0" data-title="Local Basket — Product-led theme" data-desc="Custom product pages, sticky add-to-cart and optimized checkout flow.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Local Basket"></div>
+        <div class="meta">
+          <h3>Local Basket</h3>
+          <p class="muted">Product-focused Shopify theme</p>
+          <div class="tag">E-commerce</div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card" data-tags="migration,ui-ux" tabindex="0" data-title="Green & Co — Migration & redesign" data-desc="Migration to Shopify + mobile-first UX improvements and performance work.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Green & Co"></div>
+        <div class="meta">
+          <h3>Green & Co</h3>
+          <p class="muted">Migration + brand refresh</p>
+          <div class="tag">Migration</div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card" data-tags="ecommerce,ui-ux" tabindex="0" data-title="Maison Collection — Premium UX" data-desc="High-touch PDPs, variant logic and speed optimizations for DTC brand.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Maison"></div>
+        <div class="meta">
+          <h3>Maison Collection</h3>
+          <p class="muted">Premium DTC experience</p>
+          <div class="tag">UI / UX</div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card" data-tags="branding" tabindex="0" data-title="Identity for Atelier" data-desc="Full brand identity + Shopify theme with editorial product storytelling.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Atelier"></div>
+        <div class="meta">
+          <h3>Atelier</h3>
+          <p class="muted">Brand + e-commerce</p>
+          <div class="tag">Branding</div>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="card" data-tags="ecommerce,ui-ux" tabindex="0" data-title="Herbalist — Quick-launch store" data-desc="Fast setup, optimized image delivery and checkout conversion investments.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="Herbalist"></div>
+        <div class="meta">
+          <h3>Herbalist</h3>
+          <p class="muted">Quick-launch DTC</p>
+          <div class="tag">E-commerce</div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card" data-tags="migration,branding" tabindex="0" data-title="MarketMove — Complex catalog migration" data-desc="8k SKUs migrated, variant normalization and metafields strategy.">
+        <div class="thumb"><img src="/mnt/data/Fruit-Bowl.1261_d2611357-2fd8-4419-a823-7d8ef9cd4adc.webp" alt="MarketMove"></div>
+        <div class="meta">
+          <h3>MarketMove</h3>
+          <p class="muted">Large-catalog migration</p>
+          <div class="tag">Migration</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case" style="margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:#fff;padding:16px;border-radius:12px;border:1px solid rgba(10,20,10,0.03)">
+        <h3>Boosting Convert for a DTC Brand</h3>
+        <p class="muted">72% increase in add-to-cart after PDP redesign and image optimizations.</p>
+      </div>
+      <div style="background:#fff;padding:16px;border-radius:12px;border:1px solid rgba(10,20,10,0.03)">
+        <h3>8k SKUs Migration</h3>
+        <p class="muted">Automated variant mapping and metafields to preserve SEO & data integrity.</p>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section style="margin-top:18px">
+      <h3>What clients say</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">
+        <div style="background:#fff;padding:14px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)">“They launched our store with zero downtime.”<div class="muted" style="margin-top:8px">— Founder, DTC</div></div>
+        <div style="background:#fff;padding:14px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)">“Design-forward and conversion-minded.”<div class="muted" style="margin-top:8px">— Growth Lead</div></div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" style="margin-top:20px;display:grid;grid-template-columns:1fr 360px;gap:16px">
+      <form style="background:#fff;padding:16px;border-radius:12px;border:1px solid rgba(10,20,10,0.03)" onsubmit="event.preventDefault();alert('Demo: message sent. Replace alert with your integration.')">
+        <h3>Start a project</h3>
+        <label style="font-weight:700">Name</label>
+        <input required placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(10,20,10,0.06);margin-top:8px">
+        <label style="font-weight:700;margin-top:10px">Email</label>
+        <input required type="email" placeholder="you@email.com" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(10,20,10,0.06);margin-top:8px">
+        <label style="font-weight:700;margin-top:10px">Brief</label>
+        <textarea rows="4" placeholder="Project goals, timeline, budget" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(10,20,10,0.06);margin-top:8px"></textarea>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="cta" type="submit">Send</button>
+          <button type="button" style="background:transparent;border:0;color:var(--green-1);font-weight:700" onclick="window.location='#portfolio'">View work</button>
+        </div>
+      </form>
+
+      <aside style="padding:16px;border-radius:12px;background:linear-gradient(180deg,#f9fff4,#fbfff8);border:1px solid rgba(10,20,10,0.03)">
+        <h3 style="margin-top:0">Contact</h3>
+        <p class="muted">hello@beyours.agency<br>Remote — available worldwide</p>
+        <div style="margin-top:12px">
+          <strong>Onboarding</strong>
+          <p class="muted" style="margin:6px 0 0">Call → Proposal → Kickoff</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <strong>BE yours</strong>
+        <div class="muted" style="font-size:13px">Shopify design & development</div>
+      </div>
+      <div style="text-align:right;color:var(--muted)">© <span id="year"></span> BE yours</div>
+    </footer>
+  </div>
+
+  <!-- Modal (project viewer) -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close-btn" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-inner">
+        <div class="modal-media">
+          <img id="modalImage" src="" alt="">
+        </div>
+        <div class="modal-body">
+          <h3 id="modalTitle">Project</h3>
+          <p id="modalDesc" class="muted">Project description</p>
+          <div style="margin-top:18px">
+            <a id="viewLive" class="cta" style="display:inline-block">View case</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // small helpers for animation reveal
+    document.addEventListener('DOMContentLoaded', function(){
+      setTimeout(()=>document.querySelectorAll('.fade-up').forEach(el=>el.classList.add('show')),120);
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+    // FILTER logic
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const cards = Array.from(document.querySelectorAll('.card'));
+
+    function setFilter(filter){
+      chips.forEach(c=>c.classList.toggle('active', c.dataset.filter === filter));
+      if(filter === 'all'){
+        cards.forEach(c=>c.style.display = '');
+      } else {
+        cards.forEach(c=>{
+          const tags = c.dataset.tags.split(',');
+          c.style.display = tags.includes(filter) ? '' : 'none';
+        });
+      }
+    }
+    // wire chips
+    chips.forEach(ch=>{
+      ch.addEventListener('click', ()=>setFilter(ch.dataset.filter));
+    });
+
+    // MODAL logic
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalClose = document.getElementById('modalClose');
+    const viewLive = document.getElementById('viewLive');
+
+    function openModal(card){
+      const img = card.querySelector('img').src;
+      const title = card.dataset.title || card.querySelector('h3').innerText;
+      const desc = card.dataset.desc || card.querySelector('.muted').innerText;
+      modalImage.src = img;
+      modalTitle.textContent = title;
+      modalDesc.textContent = desc;
+      viewLive.href = '#'; // replace with project URL if available
+      modalBackdrop.classList.add('open');
+      modalBackdrop.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modalBackdrop.classList.remove('open');
+      modalBackdrop.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+
+    cards.forEach(card=>{
+      card.addEventListener('click', ()=>openModal(card));
+      // keyboard - open on Enter
+      card.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') openModal(card); });
+    });
+    modalClose.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) closeModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+    // CTA demos
+    document.getElementById('quoteBtn').addEventListener('click', ()=>document.getElementById('contact').scrollIntoView({behavior:'smooth'}));
+  </script>
 </body>
 </html>
